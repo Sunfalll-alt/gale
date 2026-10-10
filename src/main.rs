@@ -1,6 +1,7 @@
 mod cli;
 mod runner;
 mod stats;
+mod tui;
 
 use clap::Parser;
 use colored::*;

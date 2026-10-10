@@ -18,6 +18,7 @@
 - 📊 **High Dynamic Range (HDR) Latency Tracking**: Records microsecond-accurate percentiles (`p50`, `p75`, `p90`, `p95`, `p99`, `p99.9`, `min`, `max`, `stddev`) using `hdrhistogram`.
 - 🌐 **HTTP/1.1 & HTTP/2 Support**: Benchmark standard endpoints or force HTTP/2 Prior Knowledge connections.
 - 🎯 **Rate Limiting**: Cap requests per second (RPS) to run controlled throughput experiments without overwhelming target servers.
+- 🖥️ **Interactive Terminal UI (TUI) Mode**: Live interactive dashboard with real-time RPS trend graph and iconic The Binding of Isaac Rebirth item art (**Breath of Life**) via `--tui`.
 - 🎨 **Rich Terminal Visuals**: Real-time progress bar, colored summary tables powered by `comfy-table`.
 - 💾 **Machine-Readable JSON Output**: Export full benchmark reports to JSON for CI/CD assertions or visualization dashboards.
 - 🛑 **Graceful Shutdown**: Intercepts `Ctrl+C` and compiles benchmark reports on partial runs without losing collected data.
@@ -51,6 +52,12 @@ cargo build --release
 Run a 10-second benchmark against an endpoint with 50 concurrent connections:
 ```bash
 gale http://127.0.0.1:8080/api/v1/ping
+```
+
+### Interactive TUI Dashboard (with Breath of Life ASCII Art)
+Run with live terminal charts and Isaac's Breath of Life item card:
+```bash
+gale http://127.0.0.1:8080/api/v1/ping -c 50 -d 30s --tui
 ```
 
 ### High Concurrency & Custom Duration

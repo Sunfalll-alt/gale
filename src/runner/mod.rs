@@ -42,26 +42,7 @@ impl BenchmarkRunner {
         // Channel for collecting metrics from workers
         let (tx, mut rx) = mpsc::channel::<RequestMetric>(concurrency * 100);
 
-        // Progress bar setup
-        let pb = ProgressBar::new(test_duration.as_secs());
-        pb.set_style(
-            ProgressStyle::default_bar()
-                .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len}s ({msg})")
-                .unwrap()
-                .progress_chars("━╸ "),
-        );
-        pb.set_message("Benchmarking in progress...");
-
         let start_time = Instant::now();
-
-        // Spawn metric aggregator task
-        let aggregator_handle = tokio::spawn(async move {
-            let mut combined_stats = WorkerStats::new();
-            while let Some(metric) = rx.recv().await {
-                combined_stats.record(metric);
-            }
-            combined_stats
-        });
 
         // Calculate rate limiter interval if rate limit is specified
         let rate_interval = (1_000_000 * concurrency as u64)
@@ -138,6 +119,33 @@ impl BenchmarkRunner {
 
         // Drop initial tx handle so receiver can finish when workers are done
         drop(tx);
+
+        if self.args.tui {
+            let report = crate::tui::run_tui(self.args.clone(), rx, is_running).await?;
+            for handle in worker_handles {
+                let _ = handle.await;
+            }
+            return Ok(report);
+        }
+
+        // Standard CLI Mode with progress bar
+        let pb = ProgressBar::new(test_duration.as_secs());
+        pb.set_style(
+            ProgressStyle::default_bar()
+                .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len}s ({msg})")
+                .unwrap()
+                .progress_chars("━╸ "),
+        );
+        pb.set_message("Benchmarking in progress...");
+
+        // Spawn metric aggregator task
+        let aggregator_handle = tokio::spawn(async move {
+            let mut combined_stats = WorkerStats::new();
+            while let Some(metric) = rx.recv().await {
+                combined_stats.record(metric);
+            }
+            combined_stats
+        });
 
         // Timer loop to update progress bar and stop after duration
         let end_deadline = start_time + test_duration;

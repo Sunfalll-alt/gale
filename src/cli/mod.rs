@@ -62,6 +62,10 @@ pub struct CliArgs {
     #[arg(short = 'k', long = "insecure", default_value_t = false)]
     pub insecure: bool,
 
+    /// Launch interactive Terminal UI (TUI) mode with live charts
+    #[arg(long = "tui", default_value_t = false)]
+    pub tui: bool,
+
     /// Export benchmark results as JSON to file or stdout
     #[arg(long = "json")]
     pub json_output: Option<Option<std::path::PathBuf>>,
