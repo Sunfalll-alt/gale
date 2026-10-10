@@ -18,9 +18,9 @@ pub enum HttpVersion {
     long_about = "Gale is a high-performance HTTP benchmark tool designed for low latency overhead, accurate percentile tracking (HDR Histogram), and rich reporting."
 )]
 pub struct CliArgs {
-    /// Target URL to benchmark
+    /// Target URL to benchmark (if omitted, Gale launches interactive menu)
     #[arg(value_name = "URL")]
-    pub url: Url,
+    pub url: Option<Url>,
 
     /// Number of concurrent client connections/workers
     #[arg(short = 'c', long = "concurrency", default_value_t = 50)]

@@ -26,7 +26,11 @@ impl BenchmarkRunner {
         let client = self.build_client()?;
         let method = self.args.parsed_method()?;
         let body = self.args.get_body_content()?;
-        let target_url = self.args.url.clone();
+        let target_url = self
+            .args
+            .url
+            .clone()
+            .ok_or_else(|| anyhow::anyhow!("Target URL must be provided"))?;
         let concurrency = self.args.concurrency;
         let test_duration = self.args.duration;
         let rate_limit = self.args.rate_limit;
@@ -170,7 +174,7 @@ impl BenchmarkRunner {
         let report = BenchmarkReport::from_stats(
             final_stats,
             actual_duration,
-            self.args.url.to_string(),
+            target_url.to_string(),
             self.args.concurrency,
         );
 

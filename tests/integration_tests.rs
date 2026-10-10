@@ -35,7 +35,10 @@ fn test_worker_stats_recording() {
 #[test]
 fn test_cli_parsing_defaults() {
     let args = CliArgs::parse_from(["gale", "http://127.0.0.1:8080/test"]);
-    assert_eq!(args.url.as_str(), "http://127.0.0.1:8080/test");
+    assert_eq!(
+        args.url.as_ref().unwrap().as_str(),
+        "http://127.0.0.1:8080/test"
+    );
     assert_eq!(args.concurrency, 50);
     assert_eq!(args.duration, Duration::from_secs(10));
     assert_eq!(args.method, "GET");

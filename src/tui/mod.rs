@@ -1,4 +1,5 @@
 pub mod art;
+pub mod menu;
 
 use anyhow::Result;
 use crossterm::{
@@ -37,7 +38,11 @@ pub async fn run_tui(
     let mut terminal = Terminal::new(backend)?;
 
     let test_duration = args.duration;
-    let url_str = args.url.to_string();
+    let url_str = args
+        .url
+        .as_ref()
+        .map(|u| u.to_string())
+        .unwrap_or_else(|| "http://127.0.0.1:8080/".to_string());
     let concurrency = args.concurrency;
 
     let start_time = Instant::now();
@@ -320,12 +325,8 @@ pub async fn run_tui(
     execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
     terminal.show_cursor()?;
 
-    let final_report = BenchmarkReport::from_stats(
-        stats,
-        start_time.elapsed(),
-        args.url.to_string(),
-        args.concurrency,
-    );
+    let final_report =
+        BenchmarkReport::from_stats(stats, start_time.elapsed(), url_str, args.concurrency);
 
     Ok(final_report)
 }

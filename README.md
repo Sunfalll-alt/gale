@@ -48,8 +48,21 @@ cargo build --release
 
 ## 🚀 Quick Start
 
-### Basic Benchmark
-Run a 10-second benchmark against an endpoint with 50 concurrent connections:
+### 🎮 Interactive Mode (Just run `gale`!)
+No need to memorize long CLI flags! Simply execute:
+```bash
+gale
+```
+This opens the interactive setup menu where you can:
+- ⚡ Pick predefined test presets (**Quick Health Check**, **Standard Benchmark**, **Stress Test**, **Rate Limited**, or **Custom**).
+- ✏️ Edit target URL, adjust concurrency (`↑`/`↓`/`←`/`→`), duration, rate limit, HTTP method (GET/POST), and protocol (HTTP/1.1 vs HTTP/2).
+- 🖼️ Enjoy Isaac's *Breath of Life* ASCII art and launch your benchmark with a single **[Enter]**.
+
+---
+
+### 💻 Direct CLI Mode (Automated / Headless)
+
+Run a 10-second benchmark directly:
 ```bash
 gale http://127.0.0.1:8080/api/v1/ping
 ```
