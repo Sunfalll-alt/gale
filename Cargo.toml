@@ -1,0 +1,35 @@
+[package]
+name = "gale"
+version = "0.1.0"
+edition = "2021"
+authors = ["Sunfalll-alt"]
+description = "A modern, high-performance HTTP load generator and benchmarking tool written in Rust"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Sunfalll-alt/gale"
+keywords = ["benchmark", "http", "load-testing", "wrk", "async"]
+categories = ["command-line-utilities", "development-tools::profiling", "network-programming"]
+
+[dependencies]
+tokio = { version = "1.40", features = ["full"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "http2", "stream"] }
+clap = { version = "4.5", features = ["derive", "cargo"] }
+hdrhistogram = "7.5"
+colored = "2.1"
+indicatif = "0.17"
+humantime = "2.1"
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+comfy-table = "7.1"
+url = "2.5"
+ctrlc = "3.4"
+
+[dev-dependencies]
+wiremock = "0.6"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
