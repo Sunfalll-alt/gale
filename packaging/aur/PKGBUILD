@@ -1,0 +1,47 @@
+# Maintainer: Sunfalll-alt <https://github.com/Sunfalll-alt>
+pkgname=gale-git
+pkgver=0.2.0.r1.g058afb4
+pkgrel=1
+pkgdesc="Modern, high-performance HTTP/1.1 & HTTP/2 load generator and benchmarking tool with TUI and GUI written in Rust"
+arch=('x86_64')
+url="https://github.com/Sunfalll-alt/gale"
+license=('MIT' 'Apache-2.0')
+depends=('gcc-libs' 'glibc')
+makedepends=('git' 'cargo')
+provides=('gale')
+conflicts=('gale' 'gale-bin')
+source=("git+https://github.com/Sunfalll-alt/gale.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/gale"
+  git describe --long --tags --abbrev=7 2>/dev/null | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g' ||
+  printf "0.2.0.r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+prepare() {
+  cd "$srcdir/gale"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --target "$(rustc -vV | sed -n 's/host: //p')"
+}
+
+build() {
+  cd "$srcdir/gale"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo build --release --all-features
+}
+
+check() {
+  cd "$srcdir/gale"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo test --all-features
+}
+
+package() {
+  cd "$srcdir/gale"
+  install -Dm755 "target/release/gale" "$pkgdir/usr/bin/gale"
+  install -Dm644 "README.md" "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm644 "LICENSE-MIT" "$pkgdir/usr/share/licenses/$pkgname/LICENSE-MIT"
+  install -Dm644 "LICENSE-APACHE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE-APACHE"
+}

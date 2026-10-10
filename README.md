@@ -29,7 +29,25 @@
 
 ## 📦 Installation
 
-### From Source
+### Arch Linux (AUR / PKGBUILD)
+
+Install via your preferred AUR helper (e.g. `paru` / `yay`):
+
+```bash
+paru -S gale-git
+# or with yay:
+yay -S gale-git
+```
+
+Or build manually from the included `PKGBUILD`:
+
+```bash
+git clone https://github.com/Sunfalll-alt/gale.git
+cd gale/packaging/aur
+makepkg -si
+```
+
+### From Source (Any Platform)
 
 Ensure you have Rust installed (`cargo` >= 1.75):
 

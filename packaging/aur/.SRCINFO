@@ -1,0 +1,19 @@
+pkgbase = gale-git
+	pkgdesc = Modern, high-performance HTTP/1.1 & HTTP/2 load generator and benchmarking tool with TUI and GUI written in Rust
+	pkgver = 0.2.0.r1.g058afb4
+	pkgrel = 1
+	url = https://github.com/Sunfalll-alt/gale
+	arch = x86_64
+	license = MIT
+	license = Apache-2.0
+	makedepends = git
+	makedepends = cargo
+	depends = gcc-libs
+	depends = glibc
+	provides = gale
+	conflicts = gale
+	conflicts = gale-bin
+	source = git+https://github.com/Sunfalll-alt/gale.git
+	sha256sums = SKIP
+
+pkgname = gale-git
