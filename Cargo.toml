@@ -25,6 +25,9 @@ url = "2.5"
 ctrlc = "3.4"
 ratatui = "0.30.2"
 crossterm = "0.29.0"
+eframe = "0.36.2"
+egui = "0.36.2"
+egui_plot = "0.37.0"
 
 [dev-dependencies]
 wiremock = "0.6"

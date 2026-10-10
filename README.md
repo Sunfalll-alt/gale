@@ -19,6 +19,8 @@
 - 🌐 **HTTP/1.1 & HTTP/2 Support**: Benchmark standard endpoints or force HTTP/2 Prior Knowledge connections.
 - 🎯 **Rate Limiting**: Cap requests per second (RPS) to run controlled throughput experiments without overwhelming target servers.
 - 🖥️ **Interactive Terminal UI (TUI) Mode**: Live interactive dashboard with real-time RPS trend graph and iconic The Binding of Isaac Rebirth item art (**Breath of Life**) via `--tui`.
+- 🪟 **Modern Desktop GUI Mode**: Clean native window application powered by `eframe`/`egui` with real-time charts via `--gui` (or select GUI directly in the interactive start menu).
+- 🐧🪟 **Cross-Platform Compatibility**: Full native support for Linux (Ubuntu, Arch, Fedora, Debian, etc. on X11 and Wayland) and Windows (x86_64 MSVC).
 - 🎨 **Rich Terminal Visuals**: Real-time progress bar, colored summary tables powered by `comfy-table`.
 - 💾 **Machine-Readable JSON Output**: Export full benchmark reports to JSON for CI/CD assertions or visualization dashboards.
 - 🛑 **Graceful Shutdown**: Intercepts `Ctrl+C` and compiles benchmark reports on partial runs without losing collected data.
@@ -59,6 +61,13 @@ This opens the interactive setup menu where you can:
 - 🖼️ Enjoy Isaac's *Breath of Life* ASCII art and launch your benchmark with a single **[Enter]**.
 
 ---
+
+### 🪟 Desktop GUI Mode (Native Window)
+Launch the standalone graphical desktop window:
+```bash
+gale --gui
+```
+Or start in interactive mode with `gale` and switch **Execution Mode** to GUI!
 
 ### 💻 Direct CLI Mode (Automated / Headless)
 

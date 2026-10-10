@@ -1,4 +1,5 @@
 mod cli;
+mod gui;
 mod runner;
 mod stats;
 mod tui;
@@ -15,6 +16,14 @@ use runner::BenchmarkRunner;
 async fn main() -> anyhow::Result<()> {
     let mut args = CliArgs::parse();
 
+    // If explicit --gui requested, launch native desktop window
+    if args.gui {
+        if let Err(e) = gui::run_gui_app(args) {
+            eprintln!("Failed to run GUI: {}", e);
+        }
+        return Ok(());
+    }
+
     // If no URL passed (e.g. user just ran `gale`), launch interactive TUI menu
     if args.url.is_none() {
         match tui::menu::run_interactive_menu()? {
@@ -26,6 +35,14 @@ async fn main() -> anyhow::Result<()> {
                 return Ok(());
             }
         }
+    }
+
+    // Check again if GUI was chosen in menu
+    if args.gui {
+        if let Err(e) = gui::run_gui_app(args) {
+            eprintln!("Failed to run GUI: {}", e);
+        }
+        return Ok(());
     }
 
     let target_url = args.url.as_ref().unwrap();

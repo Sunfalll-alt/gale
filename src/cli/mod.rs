@@ -66,6 +66,10 @@ pub struct CliArgs {
     #[arg(long = "tui", default_value_t = false)]
     pub tui: bool,
 
+    /// Launch modern graphical desktop window (GUI) mode
+    #[arg(long = "gui", default_value_t = false)]
+    pub gui: bool,
+
     /// Export benchmark results as JSON to file or stdout
     #[arg(long = "json")]
     pub json_output: Option<Option<std::path::PathBuf>>,

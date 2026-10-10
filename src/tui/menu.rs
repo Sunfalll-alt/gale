@@ -20,6 +20,13 @@ use super::art::{BREATH_OF_LIFE_ASCII, ITEM_NAME, ITEM_QUOTE};
 use crate::cli::{CliArgs, HttpVersion};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum UiMode {
+    Tui,
+    Gui,
+    Cli,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Preset {
     QuickCheck,  // 10 workers, 5s
     Standard,    // 50 workers, 10s
@@ -69,8 +76,8 @@ pub struct MenuState {
     pub rate_limit: u64,
     pub method: String,
     pub http2: bool,
-    pub tui_mode: bool,
-    pub active_field: usize, // 0: Presets, 1: URL, 2: Concurrency, 3: Duration, 4: Rate, 5: Method, 6: HTTP2, 7: TUI mode
+    pub ui_mode: UiMode,
+    pub active_field: usize, // 0: Presets, 1: URL, 2: Concurrency, 3: Duration, 4: Rate, 5: Method, 6: HTTP2, 7: UI mode
     pub is_editing_url: bool,
     pub status_msg: Option<String>,
 }
@@ -92,7 +99,7 @@ impl Default for MenuState {
             rate_limit: 0,
             method: "GET".to_string(),
             http2: false,
-            tui_mode: true,
+            ui_mode: UiMode::Tui,
             active_field: 0,
             is_editing_url: false,
             status_msg: None,
@@ -292,11 +299,16 @@ fn main_menu_loop(
             ]));
 
             // 7. Visual Mode
+            let mode_label = match state.ui_mode {
+                UiMode::Tui => "Interactive TUI (Terminal Charts & Isaac Art)",
+                UiMode::Gui => "Modern Desktop GUI (Separate Window with egui)",
+                UiMode::Cli => "Minimal CLI (Progress Bar & Summary Table)",
+            };
             settings_lines.push(Line::from(vec![
                 Span::styled(pointer(7), field_style(7)),
-                Span::styled("Display Mode:    ", field_style(7)),
+                Span::styled("Execution Mode:  ", field_style(7)),
                 Span::styled(
-                    format!("{}  [Space to toggle]", if state.tui_mode { "Interactive TUI (Charts & Isaac Art)" } else { "CLI Progress Bar" }),
+                    format!("{}  [Space to cycle TUI/GUI/CLI]", mode_label),
                     Style::default().fg(Color::LightCyan),
                 ),
             ]));
@@ -397,7 +409,13 @@ fn main_menu_loop(
                             }
                         }
                         6 => state.http2 = !state.http2,
-                        7 => state.tui_mode = !state.tui_mode,
+                        7 => {
+                            state.ui_mode = match state.ui_mode {
+                                UiMode::Tui => UiMode::Gui,
+                                UiMode::Gui => UiMode::Cli,
+                                UiMode::Cli => UiMode::Tui,
+                            };
+                        }
                         _ => {}
                     },
                     KeyCode::Char('e') => {
@@ -428,7 +446,8 @@ fn main_menu_loop(
                                             HttpVersion::Http1
                                         },
                                         insecure: false,
-                                        tui: state.tui_mode,
+                                        tui: state.ui_mode == UiMode::Tui,
+                                        gui: state.ui_mode == UiMode::Gui,
                                         json_output: None,
                                     };
                                     return Ok(Some(args));
